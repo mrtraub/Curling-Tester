@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Sweep : MonoBehaviour {
 
-	private float sweepSpeed = 1.0f;
+	private float sweepSpeed = 1.5f;
 	private float movementDist = 1.0f;
+	private bool isSweeping = false;
 
-
-	private float startingX;
+	private float startingZ;
 
 	private bool isMovingFor = true;
 
@@ -16,14 +16,24 @@ public class Sweep : MonoBehaviour {
 
 	void Start()
 	{
-		startingX = transform.position.x;
+		//startingZ = transform.position.z;
 	}
 
 	void Update()
 	{
 
 		if (Input.GetKeyUp (KeyCode.RightShift)) {
-			dropSpeedPellet ();
+			if (!isSweeping) {
+				startingZ = transform.parent.position.z;
+				Debug.Log (startingZ);
+				//transform.position = new Vector3 (transform.position.x, transform.position.y, startingZ);
+				dropSpeedPellet ();
+				isSweeping = true;
+			}
+		}
+		if (isSweeping) {
+			
+			sweeper ();
 		}
 	}
 
@@ -36,18 +46,21 @@ public class Sweep : MonoBehaviour {
 
 	private void sweeper()
 	{
-			float newX = transform.position.x + (isMovingFor ? 1 : -1) * 2 * movementDist * sweepSpeed * Time.deltaTime;
+		float newZ = transform.position.z + ((isMovingFor ? 1 : -1) * 2 * movementDist * sweepSpeed * Time.deltaTime);
+		startingZ = transform.parent.position.z;
 
-			if (newX > startingX + movementDist) {
-				newX = startingX = movementDist;
+		Debug.Log (newZ);
+			if (newZ > startingZ + movementDist) {
+				newZ = startingZ + movementDist;
 				isMovingFor = false;
 			} 
-			else if (newX < startingX) {
-				newX = startingX;
+			else if (newZ < startingZ) {
+				newZ = startingZ;
 				isMovingFor = true;
+				isSweeping = false;
 			}
 
-			transform.position = new Vector3 (newX, transform.position.y, transform.position.z);
+		transform.position = new Vector3 (transform.position.x, transform.position.y, newZ);
 	}
 
 

@@ -8,6 +8,8 @@ public class go : MonoBehaviour {
 	public Text powerMeter;
 	private float forceAmount;
 	private bool launched = false;
+
+	public bool turnOver = false;
 	// Use this for initialization
 	void Start () {
 		
@@ -22,7 +24,7 @@ public class go : MonoBehaviour {
 			}
 			if (Input.GetKey (KeyCode.Space)) {
 				//make the force continuous
-				forceAmount = forceAmount + .3f;
+				forceAmount = forceAmount + .5f;
 				powerMeter.text = forceAmount.ToString ("FORCE AMOUNT: 0");
 			}
 			if (Input.GetKeyUp (KeyCode.Space)) {
@@ -34,5 +36,17 @@ public class go : MonoBehaviour {
 				launched = true;
 			}
 		}
+		else
+		{
+			if (GetComponent<Rigidbody> ().velocity == new Vector3 (0, 0, 0) && launched == true) {
+				
+
+				GetComponent<Collector> ().enabled = false;
+				turnOver = true;
+
+			}
+			
+		}
+			
 	}
 }

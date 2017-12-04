@@ -5,6 +5,7 @@ using UnityEngine;
 public class Collector : MonoBehaviour {
 	//public List<string> inventory;
 	private float forceAmount = 5.0f;
+	private float forceAmount2 = .5f;
 
 	void Start () {
 	}
@@ -20,10 +21,19 @@ public class Collector : MonoBehaviour {
 			//inventory.Add (other.GetComponent<Collectable> ().description);
 			//Debug.Log ("collect");
 			GetComponent<Rigidbody> ().AddForce (transform.forward * forceAmount, ForceMode.VelocityChange);
+			if (Input.GetKey (KeyCode.LeftArrow)) {
+				GetComponent<Rigidbody> ().AddForce (transform.right * -forceAmount2, ForceMode.VelocityChange);
+			}
+			else if (Input.GetKey (KeyCode.RightArrow)) {
+				GetComponent<Rigidbody> ().AddForce (transform.right * forceAmount2, ForceMode.VelocityChange);
+			}
+
+
+
+
+			//GetComponent<LightUnlock> ().CheckInventory ();
 		}
 
-
-		//GetComponent<LightUnlock> ().CheckInventory ();
 	}
 
 }
