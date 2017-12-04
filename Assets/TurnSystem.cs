@@ -10,7 +10,9 @@ public class TurnSystem : MonoBehaviour {
 	public GameObject[] stones = new GameObject[10];
 	public Text pMeter;
 	public Text dMeter;
+	public Slider sMeter;
 	public GameObject targ;
+	public GameObject mainCam;
 	private int curr = 0;
 	private double[] distances;
 
@@ -31,7 +33,7 @@ public class TurnSystem : MonoBehaviour {
 			timeForNextTurn = stones [curr].GetComponent<go> ().turnOver;
 			Debug.Log (timeForNextTurn);
 			if (timeForNextTurn == true) {
-			GameObject br = GameObject.FindGameObjectWithTag ("Broom");
+				GameObject br = GameObject.FindGameObjectWithTag ("Broom");
 				if(br!=null)
 					br.SetActive (false);
 				GameObject sc = GameObject.FindGameObjectWithTag ("StoneCamera");
@@ -52,6 +54,7 @@ public class TurnSystem : MonoBehaviour {
 				s.GetComponent<go> ().powerMeter = pMeter;
 				s.GetComponent<DistanceCalc> ().target = targ;
 				s.GetComponent<DistanceCalc> ().dist = dMeter;
+				s.GetComponent<go> ().slideMeter = sMeter;
 				s.SetActive (false);
 				stones[i] = s;
 			} else {
@@ -59,6 +62,7 @@ public class TurnSystem : MonoBehaviour {
 				s.GetComponent<go> ().powerMeter = pMeter;
 				s.GetComponent<DistanceCalc> ().target = targ;
 				s.GetComponent<DistanceCalc> ().dist = dMeter;
+				s.GetComponent<go> ().slideMeter = sMeter;
 				s.SetActive (false);
 				stones[i] = s;
 			}
@@ -76,8 +80,7 @@ public class TurnSystem : MonoBehaviour {
 
 	void getScore()
 	{
-		GameObject cam = GameObject.FindGameObjectWithTag ("MainCamera");
-		cam.SetActive (true);
+		mainCam.SetActive (true);
 		int points = 1;
 		GameObject[] SS = sortStones ();
 		string winner = SS [0].tag;
@@ -91,6 +94,7 @@ public class TurnSystem : MonoBehaviour {
 		}
 		Debug.Log (winner);
 		Debug.Log (points);
+
 
 	}
 

@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class go : MonoBehaviour {
 
 	public Text powerMeter;
+	public Slider slideMeter;
 	private float forceAmount;
 	private bool launched = false;
-
+	private int plusmin = 1;
+	private bool wait = false;
 	public bool turnOver = false;
 	// Use this for initialization
 	void Start () {
@@ -19,13 +21,31 @@ public class go : MonoBehaviour {
 	void Update () {
 		//GetComponent<Rigidbody> ().velocity = transform.forward * speed;
 		if (launched == false) {
+			if (Input.GetKey (KeyCode.LeftArrow)) {
+				transform.position = Vector3.MoveTowards (transform.position, new Vector3(transform.position.x, transform.position.y, transform.position.z+1), .1f);
+			}
+
+			if (Input.GetKey (KeyCode.RightArrow)) {
+				transform.position = Vector3.MoveTowards (transform.position, new Vector3 (transform.position.x, transform.position.y, transform.position.z - 1), .1f);
+			}
+
+			if (Input.GetKey (KeyCode.UpArrow)) {
+				transform.Rotate (0, -.5f, 0);
+			}
+
+			if (Input.GetKey (KeyCode.DownArrow)) {
+				transform.Rotate (0, .5f, 0);
+			}
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				forceAmount = 0f;
 			}
 			if (Input.GetKey (KeyCode.Space)) {
 				//make the force continuous
-				forceAmount = forceAmount + .5f;
+				if (forceAmount > 80 || forceAmount < 0)
+					plusmin = plusmin * -1;
+				forceAmount = forceAmount + (plusmin*.5f);
 				powerMeter.text = forceAmount.ToString ("FORCE AMOUNT: 0");
+				slideMeter.value = forceAmount;
 			}
 			if (Input.GetKeyUp (KeyCode.Space)) {
 				//				GetComponent<Rigidbody> ().AddForce (transform.forward * 25f, ForceMode.Acceleration);
@@ -40,9 +60,13 @@ public class go : MonoBehaviour {
 		{
 			if (GetComponent<Rigidbody> ().velocity == new Vector3 (0, 0, 0) && launched == true) {
 				
-
-				GetComponent<Collector> ().enabled = false;
-				turnOver = true;
+				if (wait == false)
+					wait = true;
+				else {
+					GetComponent<Collector> ().enabled = false;
+					turnOver = true;
+					wait = false;
+				}
 
 			}
 			
