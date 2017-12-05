@@ -25,7 +25,6 @@ public class Sweep : MonoBehaviour {
 		if (Input.GetKeyUp (KeyCode.RightShift)) {
 			if (!isSweeping) {
 				startingZ = transform.parent.position.z;
-				Debug.Log (startingZ);
 				//transform.position = new Vector3 (transform.position.x, transform.position.y, startingZ);
 				dropSpeedPellet ();
 				isSweeping = true;

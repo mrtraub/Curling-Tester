@@ -8,13 +8,21 @@ public class TurnSystem : MonoBehaviour {
 	public GameObject greenStone;
 	public GameObject mauveStone;
 	public GameObject[] stones = new GameObject[10];
+	public Text[] greenScore = new Text[11];
+	public Text[] mauveScore = new Text[11];
 	public Text pMeter;
 	public Text dMeter;
 	public Slider sMeter;
 	public GameObject targ;
 	public GameObject mainCam;
-	private int curr = 0;
+	public GameObject scoreboard;
+	private int curr;
 	private double[] distances;
+	private int roundcounter = 0;
+	private int greentotal = 0;
+	private int mauvetotal = 0;
+	public int rounds = 10;
+	public Text win;
 
 	private bool timeForNextTurn;
 
@@ -46,6 +54,11 @@ public class TurnSystem : MonoBehaviour {
 
 	void init()
 	{
+		for (int i = 0; i < stones.Length; i++) {
+			if(stones[i]!=null)
+				stones [i].SetActive (false);
+		}
+
 		Vector3 p = new Vector3 (-300, 1.15f, 0);
 		for (int i = 0; i < 10; i++) {
 			if (i % 2 == 0) {
@@ -68,6 +81,7 @@ public class TurnSystem : MonoBehaviour {
 			}
 
 		}
+		curr = 0;
 	}
 
 	void Inning()
@@ -78,23 +92,58 @@ public class TurnSystem : MonoBehaviour {
 			getScore ();
 	}
 
+	void endGame()
+	{
+		
+		if (greentotal > mauvetotal)
+			win.text = "P1 Wins!";
+		else if (greentotal < mauvetotal)
+			win.text = "P2 Wins!";
+		else
+			win.text = "Tie game!";
+	}
+
 	void getScore()
 	{
 		mainCam.SetActive (true);
-		int points = 1;
+		int points = 0;
 		GameObject[] SS = sortStones ();
-		string winner = SS [0].tag;
+		string winner = "nobody";
+
+		if (SS [0].GetComponent<DistanceCalc> ().distance < 26) {
+				winner = SS[0].tag;
+				points = 1;
+		}
+			
 
 		for(int i = 0; i<SS.Length-1; i++)
 		{
-			if (SS [i].tag== SS [i + 1].tag)
+			if (SS [i].tag== SS [i + 1].tag && SS [i + 1].GetComponent<DistanceCalc> ().distance < 26)
 				points += 1;
 			else
 				break;
 		}
 		Debug.Log (winner);
 		Debug.Log (points);
+		if (winner == "GreenStone") {
+			greenScore [roundcounter].text = points.ToString ();
+			greentotal += points;
+			greenScore [10].text = greentotal.ToString ();
+		} else if (winner == "MauveStone") {
+			mauveScore [roundcounter].text = points.ToString ();
+			mauvetotal += points;
+			mauveScore [10].text = mauvetotal.ToString ();
+		}
 
+		scoreboard.SetActive (true);
+
+		roundcounter += 1;
+		if (roundcounter >= rounds)
+			endGame ();
+		else {
+			init ();
+			Inning ();
+		}
 
 	}
 

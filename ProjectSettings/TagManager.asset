@@ -9,6 +9,8 @@ TagManager:
   - MauveStone
   - Broom
   - StoneCamera
+  - MeterCanvas
+  - Scoreboard
   layers:
   - Default
   - TransparentFX

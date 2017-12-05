@@ -44,7 +44,7 @@ public class go : MonoBehaviour {
 				if (forceAmount > 80 || forceAmount < 0)
 					plusmin = plusmin * -1;
 				forceAmount = forceAmount + (plusmin*.5f);
-				powerMeter.text = forceAmount.ToString ("FORCE AMOUNT: 0");
+				//powerMeter.text = forceAmount.ToString ("FORCE AMOUNT: 0");
 				slideMeter.value = forceAmount;
 			}
 			if (Input.GetKeyUp (KeyCode.Space)) {
@@ -63,7 +63,7 @@ public class go : MonoBehaviour {
 				if (wait == false)
 					wait = true;
 				else {
-					GetComponent<Collector> ().enabled = false;
+					//GetComponent<Collector> ().enabled = false;
 					turnOver = true;
 					wait = false;
 				}
