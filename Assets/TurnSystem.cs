@@ -7,7 +7,9 @@ public class TurnSystem : MonoBehaviour {
 
 	public GameObject greenStone;
 	public GameObject mauveStone;
-	public GameObject[] stones = new GameObject[10];
+
+//	public GameObject[] stones = new GameObject[10];
+	public List<GameObject> stones;
 	public Text[] greenScore = new Text[11];
 	public Text[] mauveScore = new Text[11];
 	public Text pMeter;
@@ -21,21 +23,25 @@ public class TurnSystem : MonoBehaviour {
 	private int roundcounter = 0;
 	private int greentotal = 0;
 	private int mauvetotal = 0;
-	public int rounds = 10;
+	private int rounds = 10;
 	public Text win;
+	private int stonelength = 10;
 
 	private bool timeForNextTurn;
 
 
 	// Use this for initialization
 	void Start () {
+		rounds = (int)GetComponent<UISlider>().roundslide.value;
+		stonelength = (int)GetComponent<UISlider>().stoneslide.value;
+		stonelength = 2 * stonelength;
 		init ();
 		Inning ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (curr >= stones.Length)
+		if (curr >= stones.Count)
 			Inning ();
 		else{
 			timeForNextTurn = stones [curr].GetComponent<go> ().turnOver;
@@ -54,13 +60,13 @@ public class TurnSystem : MonoBehaviour {
 
 	void init()
 	{
-		for (int i = 0; i < stones.Length; i++) {
+		for (int i = 0; i < stones.Count; i++) {
 			if(stones[i]!=null)
-				stones [i].SetActive (false);
+				stones [i].SetActive(false);
 		}
 
 		Vector3 p = new Vector3 (-300, 1.15f, 0);
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < stonelength; i++) {
 			if (i % 2 == 0) {
 				
 				GameObject s = Instantiate (greenStone, p, greenStone.transform.rotation);
@@ -70,6 +76,7 @@ public class TurnSystem : MonoBehaviour {
 				s.GetComponent<go> ().slideMeter = sMeter;
 				s.SetActive (false);
 				stones[i] = s;
+//				stones.Add (s);
 			} else {
 				GameObject s = Instantiate (mauveStone, p, mauveStone.transform.rotation);
 				s.GetComponent<go> ().powerMeter = pMeter;
@@ -78,6 +85,7 @@ public class TurnSystem : MonoBehaviour {
 				s.GetComponent<go> ().slideMeter = sMeter;
 				s.SetActive (false);
 				stones[i] = s;
+//				stones.Add (s);
 			}
 
 		}
@@ -86,10 +94,11 @@ public class TurnSystem : MonoBehaviour {
 
 	void Inning()
 	{
-		if (curr < stones.Length)
+		if (curr < stones.Count && stones [curr] != null)
 			stones [curr].SetActive (true);
-		else
+		else {
 			getScore ();
+		}
 	}
 
 	void endGame()
@@ -107,7 +116,7 @@ public class TurnSystem : MonoBehaviour {
 	{
 		mainCam.SetActive (true);
 		int points = 0;
-		GameObject[] SS = sortStones ();
+		List<GameObject> SS = sortStones ();
 		string winner = "nobody";
 
 		if (SS [0].GetComponent<DistanceCalc> ().distance < 26) {
@@ -116,15 +125,13 @@ public class TurnSystem : MonoBehaviour {
 		}
 			
 
-		for(int i = 0; i<SS.Length-1; i++)
+		for(int i = 0; i<stonelength; i++)
 		{
 			if (SS [i].tag== SS [i + 1].tag && SS [i + 1].GetComponent<DistanceCalc> ().distance < 26)
 				points += 1;
 			else
 				break;
 		}
-		Debug.Log (winner);
-		Debug.Log (points);
 		if (winner == "GreenStone") {
 			greenScore [roundcounter].text = points.ToString ();
 			greentotal += points;
@@ -147,17 +154,17 @@ public class TurnSystem : MonoBehaviour {
 
 	}
 
-	GameObject[] sortStones()
+	List<GameObject> sortStones()
 	{
-		GameObject [] sortedStones = stones;
+		List<GameObject> sortedStones = stones;
 		GameObject selStone;
 		int counter;
 		//GameObject t;
 
-		for (int i = 0; i < stones.Length; i++) {
+		for (int i = 0; i < stonelength; i++) {
 			selStone = sortedStones [i];
 			counter = i;
-			for (int j = i+1; j < stones.Length-1; j++) {
+			for (int j = i+1; j < stonelength-1; j++) {
 				if ((float)(sortedStones [j].GetComponent<DistanceCalc> ().distance) < (float)(sortedStones [i].GetComponent<DistanceCalc> ().distance)) {
 					selStone = sortedStones [j];
 					counter = j;
