@@ -20,6 +20,9 @@ public class Collector : MonoBehaviour {
 			other.GetComponent<Collectable> ().Collect ();
 			//inventory.Add (other.GetComponent<Collectable> ().description);
 			//Debug.Log ("collect");
+			forceAmount = Random.value;
+			forceAmount = (2*forceAmount)+2;
+			Debug.Log (forceAmount);
 			GetComponent<Rigidbody> ().AddForce (transform.forward * forceAmount, ForceMode.VelocityChange);
 			if (Input.GetKey (KeyCode.LeftArrow)) {
 				GetComponent<Rigidbody> ().AddForce (transform.right * -forceAmount2, ForceMode.VelocityChange);
