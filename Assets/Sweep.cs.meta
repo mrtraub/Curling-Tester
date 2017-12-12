@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 46dfff12df6e24ce19d2bc3774400998
-timeCreated: 1509589741
+timeCreated: 1513058694
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - sweepsound: {fileID: 8300000, guid: 52e32a81bc8cb42ee96f771175abcecf, type: 3}
+  - pellet: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

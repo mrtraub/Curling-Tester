@@ -7,7 +7,7 @@ public class Sweep : MonoBehaviour {
 	private float sweepSpeed = 1.5f;
 	private float movementDist = 1.0f;
 	private bool isSweeping = false;
-
+	private AudioSource source;
 	private float startingZ;
 
 	private bool isMovingFor = true;
@@ -16,22 +16,20 @@ public class Sweep : MonoBehaviour {
 
 	void Start()
 	{
-		//startingZ = transform.position.z;
+		source = GetComponent<AudioSource>();
 	}
 
 	void Update()
 	{
-
+		
 		if (Input.GetKeyUp (KeyCode.RightShift)) {
 			if (!isSweeping) {
 				startingZ = transform.parent.position.z;
-				//transform.position = new Vector3 (transform.position.x, transform.position.y, startingZ);
 				dropSpeedPellet ();
 				isSweeping = true;
 			}
 		}
 		if (isSweeping) {
-			
 			sweeper ();
 		}
 	}
@@ -41,6 +39,8 @@ public class Sweep : MonoBehaviour {
 		GameObject p = (GameObject)Instantiate(pellet, transform.position, transform.rotation);
 		//p.transform.position;
 		p.SetActive (true);
+
+		source.Play ();
 	}
 
 	private void sweeper()

@@ -26,6 +26,7 @@ public class TurnSystem : MonoBehaviour {
 	private int rounds = 1;
 	public Text win;
 	private int stonelength = 10;
+	private AudioSource source;
 
 	private bool timeForNextTurn;
 
@@ -37,26 +38,23 @@ public class TurnSystem : MonoBehaviour {
 		stonelength = 2 * stonelength;
 		init ();
 		Inning ();
+		source = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-//		if (curr >= stones.Count)
-//			Inning ();
-//		else{
 		if (Input.GetKey("escape"))
 			Application.Quit();
 
-			timeForNextTurn = stones [curr].GetComponent<go> ().turnOver;
-			if (timeForNextTurn == true) {
-				GameObject br = GameObject.FindGameObjectWithTag ("Broom");
-				if(br!=null)
-					br.SetActive (false);
-				GameObject sc = GameObject.FindGameObjectWithTag ("StoneCamera");
-				sc.SetActive (false);
-				curr += 1;
-				Inning ();
-//			}
+		timeForNextTurn = stones [curr].GetComponent<go> ().turnOver;
+		if (timeForNextTurn == true) {
+			GameObject br = GameObject.FindGameObjectWithTag ("Broom");
+			if(br!=null)
+				br.SetActive (false);
+			GameObject sc = GameObject.FindGameObjectWithTag ("StoneCamera");
+			sc.SetActive (false);
+			curr += 1;
+			Inning ();
 		}
 	}
 
@@ -118,6 +116,7 @@ public class TurnSystem : MonoBehaviour {
 
 	void getScore()
 	{
+		source.Play ();
 		mainCam.SetActive (true);
 		int points = 0;
 		List<GameObject> SS = sortStones ();

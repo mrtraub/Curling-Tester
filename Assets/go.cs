@@ -12,9 +12,12 @@ public class go : MonoBehaviour {
 	private int plusmin = 1;
 	private bool wait = false;
 	public bool turnOver = false;
+	private AudioSource source;
+	private bool Dontplayonlaunch = false;
+
 	// Use this for initialization
 	void Start () {
-		
+		source = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -72,5 +75,13 @@ public class go : MonoBehaviour {
 			
 		}
 			
+	}
+
+	void OnCollisionEnter()
+	{
+		if (Dontplayonlaunch)
+			source.Play ();
+		else
+			Dontplayonlaunch = true;
 	}
 }
