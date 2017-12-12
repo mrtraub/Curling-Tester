@@ -23,7 +23,7 @@ public class TurnSystem : MonoBehaviour {
 	private int roundcounter = 0;
 	private int greentotal = 0;
 	private int mauvetotal = 0;
-	private int rounds = 10;
+	private int rounds = 1;
 	public Text win;
 	private int stonelength = 10;
 
@@ -41,11 +41,13 @@ public class TurnSystem : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (curr >= stones.Count)
-			Inning ();
-		else{
+//		if (curr >= stones.Count)
+//			Inning ();
+//		else{
+		if (Input.GetKey("escape"))
+			Application.Quit();
+
 			timeForNextTurn = stones [curr].GetComponent<go> ().turnOver;
-			Debug.Log (timeForNextTurn);
 			if (timeForNextTurn == true) {
 				GameObject br = GameObject.FindGameObjectWithTag ("Broom");
 				if(br!=null)
@@ -54,7 +56,7 @@ public class TurnSystem : MonoBehaviour {
 				sc.SetActive (false);
 				curr += 1;
 				Inning ();
-			}
+//			}
 		}
 	}
 
@@ -64,6 +66,8 @@ public class TurnSystem : MonoBehaviour {
 			if(stones[i]!=null)
 				stones [i].SetActive(false);
 		}
+		stones.Clear();
+
 
 		Vector3 p = new Vector3 (-300, 1.15f, 0);
 		for (int i = 0; i < stonelength; i++) {
@@ -75,8 +79,8 @@ public class TurnSystem : MonoBehaviour {
 				s.GetComponent<DistanceCalc> ().dist = dMeter;
 				s.GetComponent<go> ().slideMeter = sMeter;
 				s.SetActive (false);
-				stones[i] = s;
-//				stones.Add (s);
+//				stones[i] = s;
+				stones.Add (s);
 			} else {
 				GameObject s = Instantiate (mauveStone, p, mauveStone.transform.rotation);
 				s.GetComponent<go> ().powerMeter = pMeter;
@@ -84,8 +88,8 @@ public class TurnSystem : MonoBehaviour {
 				s.GetComponent<DistanceCalc> ().dist = dMeter;
 				s.GetComponent<go> ().slideMeter = sMeter;
 				s.SetActive (false);
-				stones[i] = s;
-//				stones.Add (s);
+//				stones[i] = s;
+				stones.Add (s);
 			}
 
 		}
@@ -103,13 +107,13 @@ public class TurnSystem : MonoBehaviour {
 
 	void endGame()
 	{
-		
 		if (greentotal > mauvetotal)
 			win.text = "P1 Wins!";
 		else if (greentotal < mauvetotal)
 			win.text = "P2 Wins!";
-		else
+		else {
 			win.text = "Tie game!";
+		}
 	}
 
 	void getScore()
@@ -145,11 +149,12 @@ public class TurnSystem : MonoBehaviour {
 		scoreboard.SetActive (true);
 
 		roundcounter += 1;
-		if (roundcounter >= rounds)
-			endGame ();
-		else {
+		if (roundcounter < rounds) {
 			init ();
 			Inning ();
+		}
+		else {
+			endGame ();
 		}
 
 	}
@@ -159,7 +164,6 @@ public class TurnSystem : MonoBehaviour {
 		List<GameObject> sortedStones = stones;
 		GameObject selStone;
 		int counter;
-		//GameObject t;
 
 		for (int i = 0; i < stonelength; i++) {
 			selStone = sortedStones [i];
@@ -175,7 +179,7 @@ public class TurnSystem : MonoBehaviour {
 			sortedStones [i] = selStone;
 				
 		}
-
+			
 		return sortedStones;
 	}
 

@@ -48,7 +48,6 @@ public class Sweep : MonoBehaviour {
 		float newZ = transform.position.z + ((isMovingFor ? 1 : -1) * 2 * movementDist * sweepSpeed * Time.deltaTime);
 		startingZ = transform.parent.position.z;
 
-		Debug.Log (newZ);
 			if (newZ > startingZ + movementDist) {
 				newZ = startingZ + movementDist;
 				isMovingFor = false;
